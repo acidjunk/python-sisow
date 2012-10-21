@@ -1,5 +1,8 @@
 """\
 """
+from distribute_setup import use_setuptools
+use_setuptools()
+
 import os
 from setuptools import setup
 
@@ -12,14 +15,17 @@ def read(fname):
 
 setup(
     name='sisow',
-    version='0.1',
+    version='0.1.1',
     description="Interface to Sisow, Dutch iDeal Payment Service Provider",
     long_description=read('README.md'),
     license="GPLv3",
     author="Robert-Reinder Nederhoed",
     author_email="r.r.nederhoed@gmail.com",
     url='https://github.com/nederhoed/python-sisow',
-    packages=['mtgox', 'tests'],
+    keywords='ideal sisow finance',
+    packages=['sisow'],
+    test_suite="tests",
+    install_requires = ['lxml'],
     classifiers = [
         "Development Status :: 2 - Pre-Alpha",
         "Programming Language :: Python",
