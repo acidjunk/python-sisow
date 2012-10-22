@@ -16,7 +16,7 @@ def read(fname):
 requires = ['lxml']
 
 setup(
-    name='sisow',
+    name='python-sisow',
     version='0.1.2',
     description="Python programming interface to Sisow, Dutch iDeal Payment Service Provider",
     long_description=read('README.rst'),
