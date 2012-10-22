@@ -17,8 +17,8 @@ requires = ['lxml']
 
 setup(
     name='sisow',
-    version='0.1.1',
-    description="Interface to Sisow, Dutch iDeal Payment Service Provider",
+    version='0.1.2',
+    description="Python programming interface to Sisow, Dutch iDeal Payment Service Provider",
     long_description=read('README.rst'),
     license="GPLv3",
     author="Robert-Reinder Nederhoed",
