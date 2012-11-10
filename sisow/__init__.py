@@ -26,6 +26,12 @@ import hashlib
 import urllib
 import urllib2
 
+
+def _account_from_file(filename):
+    """Helper to read the key and private secret from the given file """
+    with file(filename) as f:
+        return f.readline().strip(), f.readline().strip()
+
 def _xml_request(url, data=None):
     if data is not None:
         data = urllib.urlencode(data)
@@ -55,6 +61,7 @@ def _signature(keys):
     parts = ['%%(%s)s'%i for i in keys]
     return ''.join(parts)
 
+
 class WebshopURLs(object):
     """\ """
     def __init__(self, returnurl, cancelurl='', notifyurl='', callbackurl=''):
@@ -67,7 +74,7 @@ class WebshopURLs(object):
 
 class Transaction(object):
     """\
-    
+    Sisow iDeal Transaction values
     """
     def __init__(self, purchaseid, amount, issuerid, entrancecode='', description=''):
         """TODO: validation of parameters 
@@ -98,6 +105,7 @@ class Transaction(object):
     def __str__(self):
         return str(self.__dict__)
 
+
 class SisowAPI(object):
     """\
     Sisow API abstraction 
@@ -127,8 +135,13 @@ class SisowAPI(object):
             yield {'id': issuer[0].text, 'name': issuer[1].text}
     
     def start_transaction(self, transaction, urls):
+        """\
+        Transaction details in an Transaction object
+        Website callback urls in an WebshopURLs object
+        """
         call = 'TransactionRequest'
         assert isinstance(transaction, Transaction)
+        assert isinstance(urls, WebshopURLs)
         # Testmode
         transaction.testmode = 'true' if self._testmode else ''
         # Add additional attributes
@@ -165,6 +178,22 @@ class SisowAPI(object):
         xml = _xml_request(self._url_api+call, data)
         return StatusResponse(xml)
     
+    def validate_callback(self, trxid, entrancecode, status, sha1):
+        """Return True if the sha1 value can be calculated from the given 
+        parameters.
+        
+        Use this function to validate the data that has been sent to the notify 
+        or callback url.
+        """
+        signature = '%(trxid)s%(entrancecode)s%(status)s%(merchantid)s'
+        data = dict(trxid=trxid,
+                    entrancecode=entrancecode,
+                    status=status,
+                    merchantid=self.merchantid)
+        check = _sha1_signature(signature, data, self.merchantkey)
+        return sha1 == check
+
+
 class Response(object):
     """General response base class 
     
@@ -227,7 +256,8 @@ class Response(object):
             # Ensure `self._signature` has a string value.
             raise ValueError('Response._signature has not been set.')
         return sha1 == self.sha1
-        
+
+
 class TransactionResponse(Response):
     """Specific transaction respons.
     
@@ -260,6 +290,7 @@ class TransactionResponse(Response):
         self._process_xml()
         # Root element validation
         self._validate_type('transactionrequest')
+
 
 class StatusResponse(Response):
     """Specific transaction status respons.
@@ -310,6 +341,7 @@ class StatusResponse(Response):
         # Root element validation
         self._validate_type('statusresponse')
 
+
 class ErrorResponse(Exception):
     def __init__(self, xml):
         # Extract info from XML
@@ -319,8 +351,4 @@ class ErrorResponse(Exception):
         super(ErrorResponse, self).__init__("%s %s"%(code, message))
         self.code = code
         self.message = message
-
-def sisow_account(filename):
-    with file(filename) as f:
-        return f.readline().strip(), f.readline().strip()
 

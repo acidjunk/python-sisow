@@ -9,6 +9,7 @@ from hashlib import sha1
 from sisow import _signature
 from sisow import _sha1_signature
 
+from sisow import SisowAPI
 
 class TestSignature(TestCase):
     def setUp(self):
@@ -44,4 +45,24 @@ class TestSignature(TestCase):
         outcome = outcome.hexdigest()
         self.assertEquals(_sha1_signature(self.signature, self.data, secret),
                           outcome)
+
+class TestValidateCallbackSignature(TestCase):
+    def setUp(self):
+        self.api = SisowAPI('0123456', 'b36d8259346eaddb3c03236b37ad3a1d7a67cec6')
+    
+    def test_values_from_manual(self):
+        trxid = '0050000513407955'
+        ec = '123456789'
+        status = 'Success'
+        sha1 = '5c25e106ad73641bec40aec0e9144fe793c274cf'
+        self.assertEqual(self.api.validate_callback(trxid, ec, status, sha1),
+                         True)
+    
+    def test_values_from_manual_invalid(self):
+        trxid = '0050000513407955'
+        ec = '123456789'
+        status = 'Success'
+        sha1 = 'b36d8259346eaddb3c03236b37ad3a1d7a67cec6'
+        self.assertEqual(self.api.validate_callback(trxid, ec, status, sha1),
+                         False)
  

@@ -31,7 +31,7 @@ import webbrowser
 import urllib
 
 
-from sisow import sisow_account
+from sisow import _account_from_file
 from sisow import SisowAPI
 from sisow import Transaction
 from sisow import WebshopURLs
@@ -106,7 +106,7 @@ def main():
         list_banks(not args.no_test)
     else:
         # Run!
-        (merchantid, merchantkey) = sisow_account(args.f)
+        (merchantid, merchantkey) = _account_from_file(args.f)
         run_demo(merchantid, merchantkey, args.amount, args.bankid, not args.no_test)
 
 if __name__ == "__main__":
