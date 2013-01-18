@@ -82,7 +82,7 @@ class Transaction(object):
         `entrancecode` is optional
         `description` is optional
         """
-        self.shopid = ''
+        self.shopid = ''  # future
         self.payment = ''  # Empty string indicates iDeal
         self.purchaseid = purchaseid
         self.amount = amount  # Amount in cents
