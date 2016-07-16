@@ -21,8 +21,11 @@ Running the demo
 
 Make sure there is an `account-sisow.secret` file next to `demo.py`, with on the
 first line the `merchantid` and on the second line your secret `merchantkey` e.g.:
-123456789
-abe6cdba7abe6523bcde87623fa54cd45ade2787etc
+
+.. code-block:: text 
+
+    123456789
+    abe6cdba7abe6523bcde87623fa54cd45ade2787etc
 
 You Sisow account needs to be configured to allow simulation mode. If you don't enable simulation
 mode you'll receive: `sisow.ErrorResponse: TA3410 simulation forbidden`. Enabling Simulation mode is 
@@ -30,20 +33,26 @@ simple: Login to the Sisow dashboard and select the "Gevanceerd" tab.
 Enable: `Testen met behulp van simulator (toestaan)`
 
 Now you can run the demo with:
+
 `python demo.py`
 
 Default the program will run in testmode, ensuring no money will be transferred.
-To override this, add --no-test:
+To override this, add `--no-test`:
+
 `python demo.py --no-test`
 
 You can pick your own bank (issuer) using:
-`demo.py --list --no-test`
 
-Available banks
-05 ING
-09 Triodos Bank
+`python demo.py --list --no-test`
+
+.. code-block:: text 
+
+    Available banks:
+    05 ING
+    09 Triodos Bank
 
 Then choose a issuer with:
+
 `python demo.py --bank 09 --no-test`
 
 Indices and tables
