@@ -24,6 +24,11 @@ first line the `merchantid` and on the second line your secret `merchantkey` e.g
 123456789
 abe6cdba7abe6523bcde87623fa54cd45ade2787etc
 
+You Sisow account needs to be configured to allow simulation mode. If you don't enable simulation
+mode you'll receive: `sisow.ErrorResponse: TA3410 simulation forbidden`. Enabling Simulation mode is 
+simple: Login to the Sisow dashboard and select the "Gevanceerd" tab. 
+Enable: `Testen met behulp van simulator (toestaan)`
+
 Now you can run the demo with:
 `python demo.py`
 
